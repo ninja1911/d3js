@@ -16,10 +16,10 @@
     </head>
     <body>
         <script type="text/javascript">
-            var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
-                11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+            var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13];
 //Width and height
 var w = 500;
+var h_full = 200;
 var h = 100;
 var barPadding = 1; 
 
@@ -27,7 +27,7 @@ var barPadding = 1;
 var svg = d3.select("body")
             .append("svg")
             .attr("width", w)
-            .attr("height", h);
+            .attr("height", h_full);
 
 svg.selectAll("rect")
    .data(dataset)
@@ -65,8 +65,25 @@ svg.selectAll("text")
    .attr("fill", "white")
 .attr("text-anchor", "middle");
 
+// Define a labeling function
+function getLabelForIndex(i) {
+    return (i * 10) + "-" + ((i + 1) * 10);
+}
 
+// Create an X-axis Scale
+var xScale = d3.scaleBand()
+               .domain(dataset.map((d, i) => getLabelForIndex(i)))
+               .rangeRound([0, w])
+               .paddingInner(0.05); 
 
+// Create an Axis Object
+var xAxis = d3.axisBottom(xScale);
+
+// Append the Axis to Your SVG
+svg.append("g")
+   .attr("class", "x-axis")
+   .attr("transform", "translate(0," + (h_full - 80) + ")") // Positioning at the bottom
+   .call(xAxis);
 
        </script>
     </body>
